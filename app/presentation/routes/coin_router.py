@@ -10,6 +10,7 @@ coin_router = __APIRouter(
 
 @coin_router.post("/new-coin-alert")
 def webhook_coin_alert(message: __CoinAlertRequest, background_tasks: __BackgroundTasks) -> __JSONResponse:
+    print("Mensagem recebida: ", message)
     try:
         if message.type == "new_coin":
             background_tasks.add_task(__update_all_coins, message, False)

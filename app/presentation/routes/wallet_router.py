@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Security
 from fastapi.responses import JSONResponse
 from dependencies.auth_dependencies import oauth2_scheme
-
-
 wallet_router = APIRouter(
     prefix="/wallets",
     tags=["Wallet Routes"],
