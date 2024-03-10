@@ -1,7 +1,7 @@
 import os
 from fastapi.encoders import jsonable_encoder
 from datetime import timedelta
-from domain.models.user import InsertUserModel, EnumRoles
+from app.domain.models.dao.user import InsertUserModel, EnumRoles
 from domain.schemas.response_schemas.auth_response_schema import TokenResponse
 from utils.auth_utils import  encrypt_password, get_user_token
 from domain.schemas.request_schemas.auth_request_schema import UserRequest

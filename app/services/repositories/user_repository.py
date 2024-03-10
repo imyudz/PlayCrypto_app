@@ -1,5 +1,5 @@
 import os
-from domain.models.user import User, InsertUserModel
+from app.domain.models.dao.user import User, InsertUserModel
 from services.repositories.interfaces.user_interface import UserInterface
 from services.connectors.supabase_connector import SupabaseConnector
 from pydantic import EmailStr

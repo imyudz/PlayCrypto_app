@@ -3,7 +3,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 from services.repositories.user_repository import SupabaseUserRepository
-from domain.models.user import User
+from app.domain.models.dao.user import User
 from domain.schemas.response_schemas.auth_response_schema import TokenResponse
 from fastapi.encoders import jsonable_encoder
 

@@ -1,10 +1,8 @@
-import os
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
 from domain.schemas.response_schemas.auth_response_schema import TokenResponse
-from datetime import timedelta
-from domain.models.user import User
+from app.domain.models.dao.user import User
 from utils.auth_utils import authenticate_user, get_user_token
 from dependencies.auth_dependencies import get_current_active_user
 from domain.schemas.response_schemas.auth_response_schema import UserResponse
@@ -13,7 +11,6 @@ from usecases.user_usecase import create_auth_user
 
 
 auth_router = APIRouter(tags=["Authentication Routes"])
-
 
 @auth_router.get("/users/actual", response_model=UserResponse, name="read-current-user")
 async def read_current_user(current_user: User = Depends(get_current_active_user)) -> UserResponse:

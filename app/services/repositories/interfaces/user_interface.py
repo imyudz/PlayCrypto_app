@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar
-from domain.models.user import InsertUserModel
+from app.domain.models.dao.user import InsertUserModel
 T = TypeVar('T')
 
 class UserInterface(Generic[T]):

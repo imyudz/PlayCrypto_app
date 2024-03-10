@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 from fastapi.encoders import jsonable_encoder
 from fastapi import FastAPI
 from app.services.connectors.supabase_connector import SupabaseConnector
-from app.domain.models.user import InsertUserModel, User
-from app.domain.models.wallet import InsertWalletModel, Wallet
+from app.domain.models.dao.user import InsertUserModel, User
+from app.domain.models.dao.wallet import InsertWalletModel, Wallet
 from faker import Faker
 from passlib.context import CryptContext
 import random

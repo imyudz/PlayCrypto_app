@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from domain.models.user import User
+from app.domain.models.dao.user import User
 from typing import Annotated
 
 class TokenResponse(BaseModel):
