@@ -8,5 +8,4 @@ class CoingeckoAPIConnector:
     async def get_coins_list(self, include_platform: bool = False) -> list[_CGeckoCoinsListResponse]:
         headers = {"x-cg-demo-api-key": f"{self.__apikey}"}
         response = await self._async_api.request("GET", f"/api/v3/coins/list?include_platform={include_platform}", headers=headers)
-        print(response.json()[0])
         return [_CGeckoCoinsListResponse(**coin) for coin in response.json()]

@@ -11,5 +11,4 @@ class AsyncAPI(__AsyncClient):
         
     async def request(self, method: str | bytes, url: str | bytes, *args, **kwargs) -> _AsyncAPI__Response:
         joined_url = _urljoin(self.url, url)
-        print("\n\n\n", joined_url, self.url, "\n\n\n")
         return await super().request(method, joined_url, *args, **kwargs)
