@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from presentation.routes.auth_router import auth_router
 from presentation.routes.wallet_router import wallet_router
+from presentation.routes.coin_router import coin_router
 
 load_dotenv()
 
@@ -13,6 +14,7 @@ app = FastAPI(
 
 app.include_router(auth_router)
 app.include_router(wallet_router)
+app.include_router(coin_router)
 
 
 @app.get("/")
