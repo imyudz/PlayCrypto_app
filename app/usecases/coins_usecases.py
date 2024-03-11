@@ -16,20 +16,25 @@ from utils.coins_utils import \
 __coingecko_url = os.getenv("COINGECKO_BASE_URL")
 __coingecko_key = os.getenv("COINGECKO_API_KEY")
 
-async def update_coins_by_webhook_alert(webhook_request: _CoinAlertRequest, verify_webhook_coin: bool = False) -> None:
-    try:
-        # Primeiro, busca as moedas existentes na base da coingecko  
-        assert __coingecko_url and __coingecko_key, "expected 'COINGECKO_BASE_URL' and 'COINGECKO_API_KEY', but not found in .env"
-        coingecko_api = __CoingeckoAPI(
+__coingecko_api = __CoingeckoAPI(
             coingecko_url=__coingecko_url,
             coingecko_api_key=__coingecko_key,
         )
-        coins_repository = __SupabaseCoinsRepository()
-        response: list[_CGeckoCoinsListResponse] = await coingecko_api.get_coins_list()
+
+__coins_repository = __SupabaseCoinsRepository()
+    
+
+async def update_coins_by_webhook_alert(webhook_request: _CoinAlertRequest, verify_webhook_coin: bool = False) -> None:
+
+    try:
+        # Primeiro, busca as moedas existentes na base da coingecko  
+        assert __coingecko_url and __coingecko_key, "expected 'COINGECKO_BASE_URL' and 'COINGECKO_API_KEY', but not found in .env"
+
+        response: list[_CGeckoCoinsListResponse] = await __coingecko_api.get_coins_list()
         
         
         # Busca as moedas existentes no banco
-        database_coins_list: list[__CoinsModel] = await coins_repository.get_coins()
+        database_coins_list: list[__CoinsModel] = await __coins_repository.get_coins()
         
         # print(response)
         # print(database_coins_list)
@@ -45,7 +50,7 @@ async def update_coins_by_webhook_alert(webhook_request: _CoinAlertRequest, veri
                 coin_data = next((coin for coin in response if coin.name == new_coin_name or coin.id == new_coin_possible_id), None)
                 assert coin_data is not None, f"Coin {new_coin_name} or {new_coin_possible_id} not found in Coingecko API. Leaving..."
 
-                insertion = await coins_repository.insert_coins(_InsertCoinsModel(
+                insertion = await __coins_repository.insert_coins(_InsertCoinsModel(
                     coin_abreviation=coin_data.symbol.upper(),
                     coin_name=coin_data.name,
                     coin_id_coingecko=coin_data.id
@@ -61,7 +66,7 @@ async def update_coins_by_webhook_alert(webhook_request: _CoinAlertRequest, veri
                     _InsertCoinsModel(coin_id_coingecko=coin.id, coin_abreviation=coin.symbol.upper(), coin_name=coin.name)
                     for coin in response if coin.id in new_coins_ids
                 ]
-                insertion = await coins_repository.insert_coins(new_coins_list)
+                insertion = await __coins_repository.insert_coins(new_coins_list)
                 if not insertion: raise ValueError("Failed to update coins")
             else:
                 print("All coins already updated")
@@ -77,8 +82,17 @@ async def update_coins_by_webhook_alert(webhook_request: _CoinAlertRequest, veri
                     coin_name=coin.name
                 )
             )
-        insertion = await coins_repository.insert_coins(coin_list)
+        insertion = await __coins_repository.insert_coins(coin_list)
         
     except Exception as e:
         print("Erro ao atualizar as moedas existentes no banco", e)
         raise e
+
+async def get_coins_list() -> list[__CoinsModel]:
+    try:
+        coins = await __coins_repository.get_coins()
+        return coins
+    except Exception as e:
+        print("Error while getting coins list", e)
+        raise e
+    

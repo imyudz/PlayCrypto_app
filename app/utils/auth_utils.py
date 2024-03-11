@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 from services.repositories.user_repository import SupabaseUserRepository
 from app.domain.models.dao.user import User
-from domain.schemas.response_schemas.auth_response_schema import TokenResponse
+from domain.schemas.response_schemas.auth_response_schema import _TokenResponse
 from fastapi.encoders import jsonable_encoder
 
 SECRET_KEY = os.environ.get("JWT_SECRET")
@@ -13,12 +13,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def get_user_token(user: User) -> TokenResponse | None:
+def get_user_token(user: User) -> _TokenResponse | None:
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = __create_access_token(
         token_data=jsonable_encoder({"sub": user.email, "role": user.role}), expires_delta=access_token_expires
     )
-    return TokenResponse(access_token=access_token, token_type="bearer")
+    return _TokenResponse(access_token=access_token, token_type="bearer")
 
 def __create_access_token(token_data: dict, expires_delta: timedelta | None = None):
     to_encode = token_data.copy()

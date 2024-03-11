@@ -1,13 +1,11 @@
 import os
-from fastapi.encoders import jsonable_encoder
-from datetime import timedelta
 from app.domain.models.dao.user import InsertUserModel, EnumRoles
-from domain.schemas.response_schemas.auth_response_schema import TokenResponse
+from domain.schemas.response_schemas.auth_response_schema import _TokenResponse
 from utils.auth_utils import  encrypt_password, get_user_token
 from domain.schemas.request_schemas.auth_request_schema import UserRequest
 from services.repositories.user_repository import SupabaseUserRepository
 
-def create_auth_user(user: UserRequest) -> TokenResponse:
+def create_auth_user(user: UserRequest) -> _TokenResponse:
     encrypted_pwd = encrypt_password(user.password)
     assert encrypted_pwd != None
     
